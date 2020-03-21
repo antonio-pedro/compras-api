@@ -11,8 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.sistemaTat.api.exception.PessoaInexistenteOuInativaException;
-import com.example.sistemaTat.api.model.Avaliacao;
+import com.pessoal.compras.exception.PessoaInexistenteOuInativaException;
 import com.pessoal.compras.model.Compra;
 import com.pessoal.compras.model.ItemDaCompra;
 import com.pessoal.compras.model.Pessoa;
@@ -33,10 +32,8 @@ public class CompraService {
 	}
 
 	public Compra criar(@Valid Compra compra) {
-		validarPessoa(compra);
-		if(pessoaBuscadaPeloId.isInativo()) {
-			compraRepository.save(compra);
-		}
+		validarPessoa(compra); 
+			
 		return compraRepository.save(compra);
 	}
 
@@ -66,16 +63,14 @@ public class CompraService {
 		compra.setTotal(item.getValor().multiply(item.getQuantidade()).add(compra.getTotal()));
 		
 		return compraRepository.save(compra);
-	}
+}
 	
 	private void validarPessoa(Compra compra) {
 		Pessoa pessoa = null;
-		if (compra.getPessoa().getId() != null) {
-			pessoa = pessoaRepository.getOne(compra.getPessoa().getId());
-		}
-
+		pessoa = pessoaRepository.getOne(compra.getPessoa().getId());
+		
 		if (pessoa == null || pessoa.isInativo()) {
 			throw new PessoaInexistenteOuInativaException();
 		}
-}
+	}
 }
