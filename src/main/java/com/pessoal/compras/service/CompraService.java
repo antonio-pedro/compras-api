@@ -26,14 +26,14 @@ public class CompraService {
 	
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
 
 	public List<Compra> pesquisar() {
 		return compraRepository.findAll();
 	}
 
 	public Compra criar(@Valid Compra compra) {
-		validarPessoa(compra); 
-			
+		validarPessoa(compra); 			
 		return compraRepository.save(compra);
 	}
 
@@ -58,18 +58,14 @@ public class CompraService {
 	}
 	
 	public Compra atualizarValorTotalDaCompra(@Valid ItemDaCompra item) {
-		Compra compra = buscarComprasPeloId(item.getCompra().getId());
-		
-		compra.setTotal(item.getValor().multiply(item.getQuantidade()).add(compra.getTotal()));
-		
+		Compra compra = buscarComprasPeloId(item.getCompra().getId());		
+		compra.setTotal(item.getValor().multiply(item.getQuantidade()).add(compra.getTotal()));		
 		return compraRepository.save(compra);
 }
 	
-	private void validarPessoa(Compra compra) {
-		Pessoa pessoa = null;
-		pessoa = pessoaRepository.getOne(compra.getPessoa().getId());
-		
-		if (pessoa == null || pessoa.isInativo()) {
+	private void validarPessoa(Compra compra) {		
+		Optional<Pessoa> pessoa = pessoaRepository.findById(compra.getPessoa().getId());
+		if (!pessoa.isPresent() || pessoa.get().isInativo()) {
 			throw new PessoaInexistenteOuInativaException();
 		}
 	}
