@@ -3,12 +3,18 @@ package com.pessoal.compras.repository.filter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.pessoal.compras.model.Pessoa;
 
 public class CompraFilter {
 	
 	private String descricao;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataDe;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataAte;
 	private BigDecimal total;
 	private Pessoa pessoa;
