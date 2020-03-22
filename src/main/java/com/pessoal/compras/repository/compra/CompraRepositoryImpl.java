@@ -69,13 +69,14 @@ public class CompraRepositoryImpl implements CompraRepositoryQuery {
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 	
+	//pageable é o que pega os parâmetros que vem lá do cliente: size=5&page=0
 	private void adicionarRestricoesDePaginacao(TypedQuery<?> query, Pageable pageable) {
 		int paginaAtual = pageable.getPageNumber();
-		//System.out.println("paginaAtual = "+ paginaAtual);
+		//System.out.println("paginaAtual = "+ paginaAtual);//0
 		int totalRegistrosPorPagina = pageable.getPageSize();
-		//System.out.println("totalRegistrosPorPagina = "+ totalRegistrosPorPagina);
+		//System.out.println("totalRegistrosPorPagina = "+ totalRegistrosPorPagina);//5
 		int primeiroRegistroDaPagina = paginaAtual * totalRegistrosPorPagina;
-		//System.out.println("primeiroRegistroDaPagina = "+ primeiroRegistroDaPagina);
+		//System.out.println("primeiroRegistroDaPagina = "+ primeiroRegistroDaPagina);//5 * 0 = 0
 		
 		query.setFirstResult(primeiroRegistroDaPagina);
 		query.setMaxResults(totalRegistrosPorPagina);
