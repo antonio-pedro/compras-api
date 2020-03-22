@@ -1,12 +1,12 @@
 package com.pessoal.compras.resource;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pessoal.compras.event.RecursoCriadoEvent;
 import com.pessoal.compras.model.Pessoa;
+import com.pessoal.compras.repository.PessoaRepository;
+import com.pessoal.compras.repository.filter.PessoaFilter;
 import com.pessoal.compras.service.PessoaService;
-
 
 @RestController
 @RequestMapping("/pessoas")
@@ -30,15 +31,19 @@ public class PessoaResource {
 	
 	@Autowired
 	private PessoaService pessoaService;
+	
+	@Autowired
+	private PessoaRepository pessoaRepository;
 
 	// Publicador de evento de aplicação lança um evento
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
+	
 	@GetMapping
-	public List<Pessoa> pesquisar() {		
-		return pessoaService.pesquisar();
-	}
+	public Page<Pessoa> pesquisar(PessoaFilter pessoaFilter, Pageable pageable) {		
+		return pessoaRepository.filtrar(pessoaFilter, pageable);
+	}	
 
 	@PostMapping
 	public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
