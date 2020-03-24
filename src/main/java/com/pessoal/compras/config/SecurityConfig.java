@@ -15,14 +15,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		
-		String password = "admin";
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String hashedPassword = passwordEncoder.encode(password);
-		
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {		
 		auth.inMemoryAuthentication()
-			.withUser("admin").password(hashedPassword).roles("ROLE");
+			.withUser("admin").password(encodarSenha("admin")).roles("ROLE");
+	}
+
+	private String encodarSenha(String senha) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(senha);
+		return hashedPassword;
 	}
 	
 	@Bean
