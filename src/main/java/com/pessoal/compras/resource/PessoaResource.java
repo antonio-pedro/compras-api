@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,11 +42,13 @@ public class PessoaResource {
 
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA) and #oauth2.hasScope('read')")
 	public Page<Pessoa> pesquisar(PessoaFilter pessoaFilter, Pageable pageable) {		
 		return pessoaRepository.filtrar(pessoaFilter, pageable);
 	}	
 
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
 		Pessoa pessoaSalva = pessoaService.criar(pessoa);
 
@@ -56,6 +59,7 @@ public class PessoaResource {
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Pessoa> atualizar(@PathVariable Long id, @Valid @RequestBody Pessoa pessoa) {
 		Pessoa pessoaAtualizada = pessoaService.atualizar(id, pessoa);
 		
@@ -63,6 +67,7 @@ public class PessoaResource {
 	}
 	
 	@PutMapping("/{id}/ativo")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Pessoa> atualizarCampoAtivo(@PathVariable Long id, @Valid @RequestBody Pessoa pessoa) {
 		Pessoa pessoaAtualizada = pessoaService.atualizarCampoAtivo(id, pessoa.getAtivo());
 		
@@ -71,11 +76,13 @@ public class PessoaResource {
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)//retorna 204 deletado mas sem conteúdo
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_PESSOA') and #oauth2.hasScope('write')")
 	public void deletar(@PathVariable Long id) {
 		pessoaService.deletar(id);
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA) and #oauth2.hasScope('read')")
 	public Pessoa buscarPeloId(@PathVariable Long id) {
 		Pessoa pessoaBuscadaPeloId = pessoaService.buscarPessoaPeloId(id);
 		return pessoaBuscadaPeloId;

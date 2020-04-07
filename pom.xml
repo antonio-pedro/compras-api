@@ -16,6 +16,10 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		
+		<!-- define as versões do OAUTH2 e do JWT que estão abaixo -->
+		<spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
+		<spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
 	</properties>
 
 	<dependencies>
@@ -64,6 +68,39 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		
+		<!-- OAUTH2 o número da versão está definido no início do POM.XML -->
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+			<version>${spring-security-oauth2.version}</version>
+		</dependency>
+		
+		<!-- Json Web Token (JWT) o número da versão está definido no início do POM.XML -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-jwt</artifactId>
+			<version>${spring-security-jwt.version}</version>
+		</dependency>
+		
+		<!--dependencia necessária para funcionar @ConfigurationProperties("compras") SistemaComprasApiProperty -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+
+		<!--dependencia do Thymeleaf para gerar o template para envio de email-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-java8time</artifactId>
 		</dependency>
 	</dependencies>
 

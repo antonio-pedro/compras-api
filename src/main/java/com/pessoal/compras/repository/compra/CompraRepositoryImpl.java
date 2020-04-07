@@ -20,6 +20,7 @@ import com.pessoal.compras.model.Compra;
 import com.pessoal.compras.model.Compra_;
 import com.pessoal.compras.model.Pessoa_;
 import com.pessoal.compras.repository.filter.CompraFilter;
+import com.pessoal.compras.repository.projecao.ResumoCompra;
 
 public class CompraRepositoryImpl implements CompraRepositoryQuery {
 	
@@ -37,6 +38,28 @@ public class CompraRepositoryImpl implements CompraRepositoryQuery {
 		
 		TypedQuery<Compra> query = manager.createQuery(criteria);
 		adicionarRestricoesDePaginacao(query, pageable);
+		return new PageImpl<>(query.getResultList(), pageable, total(compraFilter));
+	}
+	
+	@Override
+	public Page<ResumoCompra> resumir(CompraFilter compraFilter, Pageable pageable) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<ResumoCompra> criteria = builder.createQuery(ResumoCompra.class);
+		Root<Compra> root = criteria.from(Compra.class);
+		
+		criteria.select(builder.construct(ResumoCompra.class
+				, root.get(Compra_.id)
+				, root.get(Compra_.descricao)
+				, root.get(Compra_.data)
+				, root.get(Compra_.total)
+				, root.get(Compra_.pessoa).get(Pessoa_.nome)));
+		
+		Predicate[] predicates = criarRestricoes(compraFilter, builder, root);
+		criteria.where(predicates);
+		
+		TypedQuery<ResumoCompra> query = manager.createQuery(criteria);
+		adicionarRestricoesDePaginacao(query, pageable);
+		
 		return new PageImpl<>(query.getResultList(), pageable, total(compraFilter));
 	}
 	

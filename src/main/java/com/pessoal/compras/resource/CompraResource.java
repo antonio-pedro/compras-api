@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ import com.pessoal.compras.exceptionHandler.CompraExceptionHandler.Erro;
 import com.pessoal.compras.model.Compra;
 import com.pessoal.compras.repository.CompraRepository;
 import com.pessoal.compras.repository.filter.CompraFilter;
+import com.pessoal.compras.repository.projecao.ResumoCompra;
 import com.pessoal.compras.service.CompraService;
 
 
@@ -52,11 +54,19 @@ public class CompraResource {
 	private MessageSource messageSource;
 
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_COMPRA') and #oauth2.hasScope('read')")
 	public Page<Compra> pesquisar(CompraFilter compraFilter, Pageable pageable) {		
 		return compraRepository.filtrar(compraFilter, pageable);
 	}
+	
+	@GetMapping(params = "resumo")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_COMPRA') and #oauth2.hasScope('read')")
+	public Page<ResumoCompra> resumir(CompraFilter compraFilter, Pageable pageable) {
+		return compraRepository.resumir(compraFilter, pageable);
+	}
 
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_COMPRA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Compra> criar(@Valid @RequestBody Compra compra, HttpServletResponse response) {
 		Compra compraSalva = compraService.criar(compra);
 
@@ -67,6 +77,7 @@ public class CompraResource {
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_COMPRA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Compra> atualizar(@PathVariable Long id, @Valid @RequestBody Compra compra) {
 		Compra comprasAtualizada = compraService.atualizar(id, compra);
 		
@@ -74,12 +85,14 @@ public class CompraResource {
 	}
 
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_COMPRA') and #oauth2.hasScope('write')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)//retorna 204 deletado mas sem conteúdo
 	public void deletar(@PathVariable Long id) {
 		compraService.deletar(id);
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_COMPRA') and #oauth2.hasScope('read')")
 	public Compra buscarPeloId(@PathVariable Long id) {
 		Compra comprasBuscadaPeloId = compraService.buscarComprasPeloId(id);
 		return comprasBuscadaPeloId;

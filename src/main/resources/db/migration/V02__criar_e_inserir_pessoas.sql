@@ -16,3 +16,4 @@ CREATE TABLE pessoa (
 
 
 INSERT INTO pessoa( nome, cpf, logradouro, numero, complemento, bairro, cep, id_cidade, ativo ) VALUES ('ANTONIO PEDRO COSTA', '758.347.857-47', 'SQS 209 BLOCO K', null, 'apto 604', 'ASA SUL', '70.272-110', 2, 1 ); 
+INSERT INTO pessoa( nome, cpf, logradouro, numero, complemento, bairro, cep, id_cidade, ativo ) VALUES ('STEFANI CRITINE CUNHA COSTA', '758.347.857-47', 'SQS 209 BLOCO K', null, 'apto 604', 'ASA SUL', '70.272-110', 2, 1 ); 
