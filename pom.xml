@@ -59,10 +59,10 @@
 		</dependency>
 		
 		<!--Sempre que compilar o .jar ou for subir a aplicação no heroku deve comentar esta dependencia -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
-		</dependency>
+		</dependency> -->
 		
 		<!-- Segurança da aplicação -->
 		<dependency>
