@@ -42,7 +42,7 @@ public class PessoaResource {
 
 	
 	@GetMapping
-	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA) and #oauth2.hasScope('read')")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public Page<Pessoa> pesquisar(PessoaFilter pessoaFilter, Pageable pageable) {		
 		return pessoaRepository.filtrar(pessoaFilter, pageable);
 	}	
@@ -82,7 +82,7 @@ public class PessoaResource {
 	}
 
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA) and #oauth2.hasScope('read')")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public Pessoa buscarPeloId(@PathVariable Long id) {
 		Pessoa pessoaBuscadaPeloId = pessoaService.buscarPessoaPeloId(id);
 		return pessoaBuscadaPeloId;
